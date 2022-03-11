@@ -15,6 +15,8 @@ The expected format is a semi column separated file, with at least 3 columns :
 
 Only the first municipality will be used for the municipality label.
 
+The database is compiled into a optmized json file with postal codes already mapped to a list of municipalities entries (using a numerical index)
+
 Run 
 
 ```go
@@ -25,7 +27,7 @@ Run
 
 To run the service
 ```go
-    go run cmd/server/server.go laposte_hexasmal.csv
+    go run cmd/server/server.go 
 ```
 
 ## Configuration
