@@ -1,32 +1,24 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
+	"log"
+
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/grippenet/postalcodes"
-	"io/ioutil"
-	"log"
 )
-
-func loadData(file string) (*postalcodes.PostalCodeMap, error) {
-
-	data, err := ioutil.ReadFile(file)
-	if err != nil {
-		return nil, err
-	}
-	p := postalcodes.PostalCodeMap{}
-
-	err = json.Unmarshal(data, &p)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	return &p, nil
-}
 
 func main() {
 
-	postalCodes, err := loadData("data/postal.json")
+	data_file := os.Getenv("POSTAL_FILE")
+	if data_file == "" {
+		data_file = "data/postal.json"
+	}
+
+	log.Printf("Using file '%s'", data_file)
+
+	postalCodes, err := postalcodes.LoadPostalCodeMap(data_file)
 
 	if err != nil {
 		log.Fatal("Unable to load postal code data. Aborting")
