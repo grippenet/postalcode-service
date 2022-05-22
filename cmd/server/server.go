@@ -40,10 +40,16 @@ func main() {
 		})
 	})
 
-	r.GET("/postal/:code", func(c *gin.Context) {
-		code := c.Param("code")
+	r.GET("/query/:postal", func(c *gin.Context) {
+		code := c.Param("postal")
 
-		m := postalCodes.MunicipalitiesOf(code)
+		// Dont serve too long or short code
+		if len(code) > 5 || len(code) < 5 {
+			c.JSON(404, gin.H{"status": "Not found"})
+			return
+		}
+
+		m := postalCodes.MunicipalitiesOfPostal(code)
 
 		if m == nil {
 			c.JSON(404, gin.H{"status": "Not found"})
@@ -54,6 +60,26 @@ func main() {
 			"data": m,
 		})
 
+	})
+
+	r.GET("/label/:code", func(c *gin.Context) {
+		code := c.Param("code")
+
+		if len(code) > 5 || len(code) < 5 {
+			c.JSON(404, gin.H{"status": "Not found"})
+			return
+		}
+
+		label := postalCodes.LabelAt(code)
+
+		if label == "" {
+			c.JSON(404, gin.H{"status": "Not found"})
+			return
+		}
+
+		c.JSON(200, gin.H{
+			"label": label,
+		})
 	})
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

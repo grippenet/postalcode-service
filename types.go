@@ -42,6 +42,7 @@ type PostalCodeMap struct {
 	BuiltAt        time.Time                 `json:"built_at"`
 	Postalcodes    map[string][]MapIndex     `json:"postalcodes"`
 	Municipalities map[MapIndex]Municipality `json:"municipalities"`
+	codes          map[string]MapIndex       // Index of municipalities by municipality code
 }
 
 // MapBuilder handles the creation of the municipalities registry, indexing and association to postal code
@@ -64,21 +65,39 @@ func LoadPostalCodeMap(file string) (*PostalCodeMap, error) {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
+
+	// Build municipality code index index
+	codes := make(map[string]MapIndex, len(p.Municipalities))
+	for index, m := range p.Municipalities {
+		codes[m.Code] = index
+	}
+	p.codes = codes
+
 	return &p, nil
 }
 
-// MunicipalitiesOf returns list of Municipality with a postal code
-func (p *PostalCodeMap) MunicipalitiesOf(code string) []Municipality {
-	m, found := p.Postalcodes[code]
+// MunicipalitiesOfPostal returns list of Municipality with a postal code
+func (p *PostalCodeMap) MunicipalitiesOfPostal(postal string) []Municipality {
+	m, found := p.Postalcodes[postal]
 	if !found {
 		return nil
 	}
 	r := make([]Municipality, 0, len(m))
-	for _, code := range m {
-		record := p.Municipalities[code]
+	for _, index := range m {
+		record := p.Municipalities[index]
 		r = append(r, record)
 	}
 	return r
+}
+
+// LabelAt returns municipality label for a given municipality code
+func (p *PostalCodeMap) LabelAt(code string) string {
+	index, found := p.codes[code]
+	if !found {
+		return ""
+	}
+	m := p.Municipalities[index]
+	return m.Label
 }
 
 // NewBuilder creates a builder

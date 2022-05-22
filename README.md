@@ -30,6 +30,14 @@ To run the service
     go run cmd/server/server.go 
 ```
 
+## Server API
+
+baseUrl = running base URL of the service
+
+- [baseUrl]/query/{postal} : Query municipalities for the given `{postal}` code
+- [baseUrl]/label/{code} : Get label for a municipality code
+- [baseUrl]/db : Get the database size
+
 ## Configuration
 
 Environment variable "PORT" can be used to change the default port (8080)
