@@ -10,6 +10,12 @@ import (
 	"github.com/grippenet/postalcodes"
 )
 
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+	}
+}
+
 func main() {
 
 	data_file := os.Getenv("POSTAL_FILE")
@@ -26,6 +32,8 @@ func main() {
 	}
 
 	r := gin.Default()
+
+	r.Use(Cors())
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
