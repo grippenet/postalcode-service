@@ -13,7 +13,7 @@ The expected format is a semi column separated file, with at least 3 columns :
  - 2 : Municipality label
  - 3 : Postal code associated with the municipality
 
-Only the first municipality will be used for the municipality label.
+The first row with a municipality code will be used for the municipality label. later labels with this code in the file will be ignored (should be the same).
 
 The database is compiled into a optmized json file with postal codes already mapped to a list of municipalities entries (using a numerical index)
 
