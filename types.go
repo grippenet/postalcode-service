@@ -6,7 +6,7 @@ package postalcodes
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -55,7 +55,7 @@ type MapBuilder struct {
 // LoadPostalCodeMap load the Postal code mapping registry from json
 func LoadPostalCodeMap(file string) (*PostalCodeMap, error) {
 
-	data, err := ioutil.ReadFile(file)
+	data, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
