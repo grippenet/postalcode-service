@@ -4,7 +4,7 @@
 
 ARG DIR=/go/src/github.com/grippenet/postalcode-service
 
-FROM golang:1.17-alpine as builder
+FROM golang:1.26-alpine as builder
 ARG DIR # Populate global ARG for this build
 RUN apk update && apk add --no-cache git ca-certificates && update-ca-certificates
 RUN mkdir -p ${DIR}
